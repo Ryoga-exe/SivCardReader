@@ -128,13 +128,13 @@ void CardReaderWin::Read(CardReaderWin* self)
 
 	// リーダ列挙
 	DWORD mszLen = 0;
-	if (SCardListReaders(c.ctx, nullptr, nullptr, &mszLen) != SCARD_S_SUCCESS or mszLen <= 2)
+	if (SCardListReadersW(c.ctx, nullptr, nullptr, &mszLen) != SCARD_S_SUCCESS or mszLen <= 2)
 	{
 		self->m_ok = false;
 		self->m_running = false;
 	}
 	std::vector<wchar_t> msz(mszLen);
-	if (SCardListReaders(c.ctx, nullptr, msz.data(), &mszLen) != SCARD_S_SUCCESS) {
+	if (SCardListReadersW(c.ctx, nullptr, msz.data(), &mszLen) != SCARD_S_SUCCESS) {
 		self->m_ok = false;
 		self->m_running = false;
 		return;
@@ -157,7 +157,7 @@ void CardReaderWin::Read(CardReaderWin* self)
 	while (self->m_running)
 	{
 		// 200ms タイムアウトで監視
-		if (SCardGetStatusChange(c.ctx, 200, &st, 1) != SCARD_S_SUCCESS)
+		if (SCardGetStatusChangeW(c.ctx, 200, &st, 1) != SCARD_S_SUCCESS)
 		{
 			continue;
 		}
@@ -171,7 +171,7 @@ void CardReaderWin::Read(CardReaderWin* self)
 		// 接続
 		PcscCard card;
 		DWORD proto{};
-		if (SCardConnect(c.ctx, readerW.c_str(), SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &card.handle, &proto) != SCARD_S_SUCCESS)
+		if (SCardConnectW(c.ctx, readerW.c_str(), SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &card.handle, &proto) != SCARD_S_SUCCESS)
 		{
 			continue;
 		}
