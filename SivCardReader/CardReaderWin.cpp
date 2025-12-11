@@ -132,6 +132,7 @@ void CardReaderWin::Read(CardReaderWin* self)
 	{
 		self->m_ok = false;
 		self->m_running = false;
+		return;
 	}
 	std::vector<wchar_t> msz(mszLen);
 	if (SCardListReadersW(c.ctx, nullptr, msz.data(), &mszLen) != SCARD_S_SUCCESS) {
